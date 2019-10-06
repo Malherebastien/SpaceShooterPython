@@ -1,3 +1,3 @@
 from src.MainFrame import MainFrame
 
-mainFrame = MainFrame()
+mainFrame = MainFrame('red')
