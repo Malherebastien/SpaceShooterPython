@@ -1,1 +1,3 @@
-print("Coucou wolfax");
+from src.MainFrame import MainFrame
+
+mainFrame = MainFrame()
