@@ -1,15 +1,65 @@
 from tkinter import Tk, Canvas
 
+from src.game.Player import Player
+
+PLAYER_X_START = 200
+PLAYER_Y_START = 200
+
 
 class Game :
 
     def __init__(self):
         self.frame = Tk()
-        self.canvas = Canvas(self.frame, background="black")
+        self.canvas = Canvas(self.frame, width=1000, height=1000, background="black")
+        self.rectangle = self.createPlayer()
+        self.player = Player(PLAYER_X_START, PLAYER_Y_START)
+        self.key_pressed = {}
+        self.set_bindings()
+        #self.animate()
+        self.canvas.pack()
+        self.frame.mainloop()
+
+    def animate(self):
+        # print(self.key_pressed)
+        if self.key_pressed['z']: self.up()
+        if self.key_pressed['q']: self.left()
+        if self.key_pressed['s']: self.down()
+        if self.key_pressed['d']: self.right()
+        self.frame.after(10, self.animate)
 
     def createPlayer(self):
-        while 1:
-            player = self.canvas.create_rectangle((200,200), (50,50), fill='blue')
-            self.canvas.move(player, 10, 10)
+        return self.canvas.create_rectangle((PLAYER_X_START, PLAYER_Y_START), (50, 50), fill='blue')
 
-            self.canvas.move(player, 150, 150)
+    def set_bindings(self):
+        for char in ['z', 'q', 's', 'd']:
+            print("coucou %s" % char)
+            #self.frame.bind("KeyPress-%s" % char, self.pressed)
+            self.frame.bind(char, self.pressed)
+            self.frame.bind("KeyRelease-%s" % char, self.released)
+            self.key_pressed[char] = False
+
+    def pressed(self, event):
+        print("coucou")
+        self.key_pressed[event.char] = True
+
+    def released(self, event):
+        self.key_pressed[event.char] = False
+
+    def left(self, event):
+        self.player.posX -= 10
+        self.canvas.move(self.rectangle, -10, 0)
+
+    def right(self, event):
+        self.player.posY += 10
+        self.canvas.move(self.rectangle, 10, 0)
+
+    def up(self, event):
+        self.player.posY -= 10
+        self.canvas.move(self.rectangle, 0, -10)
+
+    def down(self, event):
+        self.player.posX += 10
+        self.canvas.move(self.rectangle, 0, 10)
+
+
+Game()
