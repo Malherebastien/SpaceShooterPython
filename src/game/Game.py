@@ -15,12 +15,12 @@ class Game :
         self.player = Player(PLAYER_X_START, PLAYER_Y_START)
         self.key_pressed = {}
         self.set_bindings()
-        #self.animate()
+        self.animate()
         self.canvas.pack()
         self.frame.mainloop()
 
     def animate(self):
-        # print(self.key_pressed)
+        print(self.key_pressed)
         if self.key_pressed['z']: self.up()
         if self.key_pressed['q']: self.left()
         if self.key_pressed['s']: self.down()
@@ -31,33 +31,32 @@ class Game :
         return self.canvas.create_rectangle((PLAYER_X_START, PLAYER_Y_START), (50, 50), fill='blue')
 
     def set_bindings(self):
+        self.frame.bind('<KeyPress-x>', self.pressed)
         for char in ['z', 'q', 's', 'd']:
             print("coucou %s" % char)
-            #self.frame.bind("KeyPress-%s" % char, self.pressed)
-            self.frame.bind(char, self.pressed)
-            self.frame.bind("KeyRelease-%s" % char, self.released)
+            self.frame.bind('<KeyPress-%s>' % char, self.pressed)
+            self.frame.bind('<KeyRelease-%s>' % char, self.released)
             self.key_pressed[char] = False
 
     def pressed(self, event):
-        print("coucou")
         self.key_pressed[event.char] = True
 
     def released(self, event):
         self.key_pressed[event.char] = False
 
-    def left(self, event):
+    def left(self):
         self.player.posX -= 10
         self.canvas.move(self.rectangle, -10, 0)
 
-    def right(self, event):
+    def right(self):
         self.player.posY += 10
         self.canvas.move(self.rectangle, 10, 0)
 
-    def up(self, event):
+    def up(self):
         self.player.posY -= 10
         self.canvas.move(self.rectangle, 0, -10)
 
-    def down(self, event):
+    def down(self):
         self.player.posX += 10
         self.canvas.move(self.rectangle, 0, 10)
 
